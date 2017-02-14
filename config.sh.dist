@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+#
+# Example configuration file
+#
+
+
+###########################################################################
+# Programs
+NUSIM=/usr/local/bin/nusim
+SQLPLUS=/usr/bin/sqlplus64
+
+
+###########################################################################
+# Input path
+
+# The location of the (customized) Mango repository to install from
+REPO=/var/www/html/Mango
+
+# The web-root directory
+# This must be the same as `webserver.root' in the Nusim configuration (`app/config/parameters_private.yml')
+BASE=/var/www/html
+
+
+###########################################################################
+# Output paths
+
+# Site URL components: site name
+CRM_HOST=local-instance.dev
+# Site path; by default Nusim uses /$INSTANCE/$FLAVOR (see below) but I like shorter, predictable paths
+CRM_PATH=/project
+
+# Destination directory: where to install the instance
+# Nusim installs it in $BASE/$INSTANCE/$FLAVOR but I like a shorter, predictable path
+# If you change DEST you must configure Apache to map $CRM_PATH to $DEST (symlink, rewrite etc)
+DEST=$BASE$CRM_PATH
+# Archive: move here the existing installation (if any) for backup purposes
+ARCHIVE=$BASE/archive
+
+
+###########################################################################
+# Instance configuration
+# These arguments are used by Nusim to install and configure the instance
+
+# Sugar
+INSTANCE=
+FLAVOR=ult
+VERSION=7.8.0.0
+# Database
+DB_TYPE=oci8
+# Create a new user using sqlplus64 and put its name and password here. Do not use system/manager
+DB_USER=
+DB_PASS=
+DB_HOST=localhost
+DB_PORT=1521
+DB_NAME=
+# Admin user
+ADMIN_USER=admin
+ADMIN_PASS=admin
+
+
+###########################################################################
+# Put the demo license key here
+LICENSE_KEY=
+
+
+# That's all, folks!

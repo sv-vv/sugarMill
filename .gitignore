@@ -1,0 +1,13 @@
+#
+# Git ignore file
+#
+
+
+# Ignore the actual configuration file
+/config.sh
+
+# Ignore the post-install scripts; the can be customized
+/post-install/*
+
+
+# That's all, folks!

@@ -1,0 +1,15 @@
+#
+# Local Git ignore file
+#
+# The purpose of this file is to force Git create this directory on checkout.
+#
+
+
+# Ignore everything in this directory
+*
+
+# But don't ignore this file
+!.gitignore
+
+
+# That's all, folks!

@@ -1,0 +1,7 @@
+--
+-- Sample post-install SQL script that sets some preferences for the Administrator user.
+--
+
+UPDATE USER_PREFERENCES SET CONTENTS = 'YTo4OntzOjEzOiJyZW1pbmRlcl90aW1lIjtpOjE4MDA7czoyMDoiY2FsZW5kYXJfcHVibGlzaF9rZXkiO3M6MzY6IjRmZWE4NThhLWE0ZDMtMTFlNi1iZDhmLTU2ODQ3YWZlOTc5OSI7czo4OiJ0aW1lem9uZSI7czoxNjoiRXVyb3BlL0J1Y2hhcmVzdCI7czo1OiJ0aW1lZiI7czozOiJIOmkiO3M6NToiZGF0ZWYiO3M6NToiZC5tLlkiO3M6MjY6ImRlZmF1bHRfbG9jYWxlX25hbWVfZm9ybWF0IjtzOjM6ImYgbCI7czoyOiJ1dCI7YjoxO3M6MTE6Il9fc3VnYXJfdXJsIjtzOjE4OiJ2MTAvbWUvcHJlZmVyZW5jZXMiO30=' WHERE ASSIGNED_USER_ID = '1';
+
+-- That's all, folks!

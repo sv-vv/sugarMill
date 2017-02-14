@@ -1,0 +1,36 @@
+#
+# SugarCRM .gitignore file for development
+#
+
+# Ignore the cache directory completely.
+# Everything it contains is generated and can be re-generated again
+# either by a QRR or when it's needed.
+/cache/
+
+# Ignore generated files and directories from the custom directory.
+/custom/history/
+/custom/modulebuilder/
+/custom/working/
+/custom/modules/Connectors/metadata/connectors.php
+/custom/modules/unified_search_modules_display.php
+/custom/modules/*/Ext/
+/custom/application/Ext/
+/custom/blowfish/
+
+# Custom configuration should also be ignored.
+/config.php
+/config_override.php
+
+# The silent upgrade scripts aren't needed.
+/silentUpgrade*.php
+
+# Logs files can safely be ignored.
+*.log
+/logs/
+
+# Ignore the new upload directories.
+/upload/
+/upload_backup/
+
+
+# This is the end of file
