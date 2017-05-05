@@ -14,9 +14,9 @@ work to install and configure an instance and focus on the development.
 * Moves the installed instance to a different directory (`nusim` uses a hardcoded way to compose 
   installation the path).
 * Activates the developer mode in the installed instance.
-* Runs post-install scripts. Several examples are provided: simple SQL files to populate classifiers 
-  tables; PHP scripts to create complex Sugar objects (Users, Accounts); shell scripts for other kinds
-  of tasks (run the Sugar's cron script, f.e).
+* Runs local post-install scripts, not included in the Mango repository. Several examples are provided: 
+  simple SQL files to populate classifiers  tables; PHP scripts to create complex Sugar objects 
+  (Users, Accounts); shell scripts for other kinds of tasks (run the Sugar's cron script, f.e).
 * Creates a backup copy of the existing instance (if any).
 * Sets the current branch and commit hash as the version of the installed instance (by default it 
   is `999`, not quite a useful value). The version can be checked in the "About" page.
@@ -82,7 +82,8 @@ as a starter.
 * Add more sample post-install scripts.
 * Investigate using `nusim instance:script:run` to run the PHP post-install scripts.
 * Investigate adding examples that use `https://github.com/sugarcrmlabs/SystemData` to import teams,
-  roles, users, teams membership and roles membership. 
+  roles, users, teams membership and roles membership.
+* Create `config_override.php` when it doesn't exist.
 
 
 <!-- That's all, folks! -->

@@ -155,7 +155,7 @@ function check_mango_status() {
 function install_instance() {
     local CMD="$NUSIM\
         install:developer --debug \
-        --repo-path $REPO \
+        --install-server $CRM_HOST --deployed-server $CRM_HOST --repo-path $REPO \
         --instance $INSTANCE --sugar-flavor $FLAVOR --sugar-version $VERSION \
         --db-type $DB_TYPE --db-user $DB_USER --db-pass $DB_PASS --db-host $DB_HOST --db-name 0.0.0.0/$DB_NAME --db-port $DB_PORT \
         --license-key $LICENSE_KEY \
@@ -198,19 +198,23 @@ function backup_old_instance() {
 function fixup_instance_code() {
     # Move the instance from the directory where Nusim generated it to its final destination, if different
     if [ "$DEST" != "$BASE/$INSTANCE/$FLAVOR" ]; then
+        rm -rf "$DEST"
         mv "$BASE/$INSTANCE/$FLAVOR" "$DEST"
         rmdir "$BASE/$INSTANCE"
     fi
 
     # Fixup the site URL
     local CRM_PATH=${CRM_PATH%%/}
-    sed -i.bak "s#'site_url' => '.*'#'site_url' => 'http://$CRM_HOST$CRM_PATH/'#" "$DEST/config.php"
     sed -i.bak 's#RewriteBase.*$#RewriteBase '${CRM_PATH}'#' "$DEST/.htaccess"
-    # portal2.config.js contains a JSON; all backslashes are escaped (doubled) in JSON
-    sed -i.bak 's#http:\\/\\/localhost\\/'${INSTANCE}'\\/'${FLAVOR}'#http:\\/\\/'${CRM_HOST}'\\'${CRM_PATH}'#g' "$DEST/portal2/config.js"
+    echo "\$sugar_config['site_url'] = 'http://$CRM_HOST$CRM_PATH/';" >> "$DEST/config_override.php"
+    # Fix any custom URLs generated in "config_override.php"
+    sed -i.bak "s#\(\$sugar_config\['.*'\]\s*=\s*'http://$CRM_HOST\)/$INSTANCE/$FLAVOR#\1$CRM_PATH#" "$DEST/config_override.php"
+
+    # portal2/config.js contains a JSON; all backslashes are escaped (doubled) in JSON
+    sed -i.bak 's#http:\\/\\/'${CRM_HOST}'\\/'${INSTANCE}'\\/'${FLAVOR}'#http:\\/\\/'${CRM_HOST}'\\'${CRM_PATH}'#g' "$DEST/portal2/config.js"
 
     # Enable the developer mode
-    sed -i "s/\(developerMode['\"]\).*$/\1 => true,/g" "$DEST/config.php"
+    echo "\$sugar_config['developerMode'] = true;" >> "$DEST/config_override.php"
 
     # Set the commit hash as build number (to be displayed in the About page)
     sed -i.bak "s#\(\$sugar_build\s*=\s*\)'.*'#\1'[commit $MANGO_HASH; branch $MANGO_BRANCH]'#g" "$DEST/sugar_version.php"
