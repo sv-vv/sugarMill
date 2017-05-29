@@ -1,0 +1,15 @@
+{
+    "name": "sv-vv/sugar-mill",
+    "description": "Installation tool for developer instances of SugarCRM customized by the PS team.",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Valentin VĂLCIU",
+            "email": "valentin.valciu@softvision.ro"
+        }
+    ],
+    "bin": [
+        "setup.sh"
+    ]
+}
