@@ -31,7 +31,7 @@ work to install and configure an instance and focus on the development.
 1. Copy `config.sh.dist` as `config.sh`
 2. Edit `config.sh`, set/change the values to match your project and your setup (path of the customized
    Mango, path where to create the instance, database type/user/password/name).
-3. Run `./setup.sh`
+3. Run `./mill.sh`
 
 ### Customization
 
