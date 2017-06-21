@@ -28,14 +28,18 @@ work to install and configure an instance and focus on the development.
 
 ## Usage
 
-1. Copy `config.sh.dist` as `config.sh`
-2. Edit `config.sh`, set/change the values to match your project and your setup (path of the customized
-   Mango, path where to create the instance, database type/user/password/name).
-3. Run `./mill.sh`
+1. Create a new directory and open a terminal window in it.
+2. Run `composer init` and fill in the required values (package name, description, author, package type, license). You can leave "Minimum Stability" empty for now. Enter "no" when it asks about adding dependencies (`require` and `require-dev`). They cannot be added yet.
+3. Run `composer config repositories.mill git https://github.com/sv-vv/sugarMill` to add the repository of the SugarMill package. It is not available on [Packagist](http://packagist.org) and `composer` needs to know where to find it on the `require` step.
+4. Run `composer config bin-dir .` to let Composer link the binary exposed by SugarMill directly in the project directory.
+5. Run `composer require sv-vv/sugar-mill "0.*"`. This step installs the package and prepares it for execution. It generates a shortcut named `.mill.sh` directly in the project director. This shortcut can be used to start the install of the Sugar instance. 
+6. Copy `vendor/sv-vv/sugar-mill/config.sh.dist` as `./config.sh`
+7. Edit `config.sh`; set/change the values to match your project and your setup (path of the customized Mango, path where to create the instance, database type/user/password/name).
+8. Run `./mill.sh`
 
 ### Customization
 
-Write post-install action files in the `post-install` directories.
+Create the `post-install` subdirectory and write post-install action files in it.
 
 The files from `post-install/` subdirectory are enumerated using the shell's `*` glob specifier
 and are executed as follows:
@@ -51,7 +55,7 @@ do not fit in any of the above categories) or in subdirectories.
 The shell returns the files in the alphabetical order. Starting the file name with a numerical 
 prefix provides an easy way to put the files in the needed execution order.
 
-Several simple examples for post-script actions are listed in the `examples/` directory. 
+Several simple examples for post-script actions are listed in the `vendor/sv-vv/sugar-mill/examples/` directory.
 You can copy some of them in the `post-install/` directory and customize them to match your needs,
 as a starter.
 
