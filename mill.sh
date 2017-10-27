@@ -302,17 +302,22 @@ function create_git_repo() {
         cp "$HERE/examples/git-ignore.txt" "$DEST/.gitignore"
     fi
 
-    # Put the code into a Git repository for development
+    # Create a Git repository in the instance directory to be used for development
     cd "$DEST"
     git init
-    git add .
-    git commit -q -m "Fresh installation of commit $MANGO_HASH (branch $MANGO_BRANCH); DB_USER=$DB_USER"
-
 
     # Local customization of the repository
     # Ignore backup files and vim temporary files
-    echo '*.bak' >> .git/info/exclude
-    echo '*.swp' >> .git/info/exclude
+    echo << END >> .git/info/exclude
+
+# Added by sugarMill
+*.bak
+*.swp
+END
+
+    # Put the code into the Git repository
+    git add .
+    git commit -q -m "Fresh installation of commit $MANGO_HASH (branch $MANGO_BRANCH); DB_USER=$DB_USER"
 
     # Allow forced pushes (this is a working tree, after all)
     git config receive.denyCurrentBranch warn
