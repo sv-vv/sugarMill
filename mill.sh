@@ -60,6 +60,9 @@ ADMIN_PASS=admin
 LICENSE_KEY=
 
 
+# Export some variables; they might be needed by the post-install scripts
+export DATA DEST
+
 
 #########################################################################
 # Script internals
@@ -240,14 +243,13 @@ function run_sql_script() {
 function run_php_script() {
     local script="$1"
     local base=${script##*/}
-    local name=__post_install__${base}__$$.php
 
     echo "=== $base ==="
-    cp "$script" "$DEST/$name"
 
+    # The current directory must be the instance directory in order to find the included files
+    # However, the script can be anywhere on the disk, as long as it is invoked using its complete name
     cd "$DEST"
-    php -f "./$name"
-    rm "./$name"
+    php -f "$script"
     cd - &>/dev/null
 }
 
@@ -255,7 +257,9 @@ function run_sh_script() {
     local script="$1"
 
     echo "=== ${script##*/}: ==="
-    . "$script"
+    cd "$DEST"
+    $SHELL "$script"
+    cd - &>/dev/null
 }
 # /Helpers
 ###########
@@ -298,17 +302,22 @@ function create_git_repo() {
         cp "$HERE/examples/git-ignore.txt" "$DEST/.gitignore"
     fi
 
-    # Put the code into a Git repository for development
+    # Create a Git repository in the instance directory to be used for development
     cd "$DEST"
     git init
-    git add .
-    git commit -q -m "Fresh installation of commit $MANGO_HASH (branch $MANGO_BRANCH); DB_USER=$DB_USER"
-
 
     # Local customization of the repository
     # Ignore backup files and vim temporary files
-    echo '*.bak' >> .git/info/exclude
-    echo '*.swp' >> .git/info/exclude
+    echo << END >> .git/info/exclude
+
+# Added by sugarMill
+*.bak
+*.swp
+END
+
+    # Put the code into the Git repository
+    git add .
+    git commit -q -m "Fresh installation of commit $MANGO_HASH (branch $MANGO_BRANCH); DB_USER=$DB_USER"
 
     # Allow forced pushes (this is a working tree, after all)
     git config receive.denyCurrentBranch warn
