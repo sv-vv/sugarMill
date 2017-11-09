@@ -60,6 +60,9 @@ ADMIN_PASS=admin
 LICENSE_KEY=
 
 
+# Export some variables; they might be needed by the post-install scripts
+export DATA DEST
+
 
 #########################################################################
 # Script internals
@@ -255,7 +258,9 @@ function run_sh_script() {
     local script="$1"
 
     echo "=== ${script##*/}: ==="
-    . "$script"
+    cd "$DEST"
+    $SHELL "$script"
+    cd - &>/dev/null
 }
 # /Helpers
 ###########
