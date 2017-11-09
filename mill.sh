@@ -243,14 +243,13 @@ function run_sql_script() {
 function run_php_script() {
     local script="$1"
     local base=${script##*/}
-    local name=__post_install__${base}__$$.php
 
     echo "=== $base ==="
-    cp "$script" "$DEST/$name"
 
+    # The current directory must be the instance directory in order to find the included files
+    # However, the script can be anywhere on the disk, as long as it is invoked using its complete name
     cd "$DEST"
-    php -f "./$name"
-    rm "./$name"
+    php -f "$script"
     cd - &>/dev/null
 }
 
