@@ -71,8 +71,9 @@ as a starter.
 
 ## Todo
 
-* Make it database type-agnostic. The current version works only with Oracle (it uses the sql*plus
-  command line client to run the SQL files).
+* <del>Make it database type-agnostic. The current version works only with Oracle (it uses the sql*plus
+  command line client to run the SQL files).</del> (added MySQL on v0.4)
+* Create Composer scripts to create a sample `config.sh` and `post-install` scripts on installation.
 * Make it receive the path of the configuration file in the command line.
 * Allow overriding in the command line the options loaded from the configuration file.
 * Make the moving of the instance to a new directory optional (currently the moving can be avoided by 
@@ -84,10 +85,9 @@ as a starter.
 * Extract the path to the PHP interpreter into a variable and let it be configured in `config.sh`.
 * Return consistent exit codes and document them.
 * Add more sample post-install scripts.
-* Investigate using `nusim instance:script:run` to run the PHP post-install scripts.
 * Investigate adding examples that use `https://github.com/sugarcrmlabs/SystemData` to import teams,
   roles, users, teams membership and roles membership.
-* Create `config_override.php` when it doesn't exist.
+* <del>Put the configuration fixup into `config_override.php`.</del> (implemented in v0.3)
 
 
 <!-- That's all, folks! -->
