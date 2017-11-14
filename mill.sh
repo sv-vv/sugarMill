@@ -19,7 +19,10 @@ HERE=$(dirname $(readlink -e $0))
 #
 # Programs
 NUSIM=/usr/local/bin/nusim
-SQLPLUS=/usr/bin/sqlplus64
+#
+# Sample database-specific tools (only the one used by database type $DB_TYPE is needed)
+#SQLPLUS=/usr/bin/sqlplus64
+#MYSQL_CLIENT=/bin/mysql
 
 #
 # Input paths
@@ -90,6 +93,25 @@ function fmtTime () {
 #
 
 #
+# Load the database library depending on the value of `$DB_TYPE`
+#
+function load_db_library() {
+    case "$DB_TYPE" in
+        "oci8")
+            . ${CODE}/db/oracle.sh
+        ;;
+        "mysql")
+            . ${CODE}/db/mysql.sh
+        ;;
+        *)
+            echo "Unknown or empty DB_TYPE ($DB_TYPE). Cannot continue."
+            exit
+        ;;
+    esac
+}
+
+
+#
 # Load the custom configuration from file `config.sh`
 #
 function load_config() {
@@ -104,9 +126,6 @@ function load_config() {
         echo "Set the needed values in it then run \`$(basename $0)' again."
         return 1
     fi
-
-    # Compute some paths
-    DB_URL="$DB_USER/$DB_PASS@//$DB_HOST:$DB_PORT/$DB_NAME"
 
     # Make sure some variables cannot be modified by config.sh
     DATA="$HERE/post-install"
@@ -123,7 +142,7 @@ function show_config() {
     echo '  + instance path ($DEST)   : '${DEST}
     echo '  * archive path  ($ARCHIVE): '${ARCHIVE}
     echo "  + Instance  : $INSTANCE/$FLAVOR/$VERSION"
-    echo "  * Database  : $DB_TYPE, $DB_URL"
+    echo -n "  * Database  : "; database_url
     echo "  + Admin user: $ADMIN_USER/$ADMIN_PASS"
 }
 
@@ -160,7 +179,7 @@ function install_instance() {
         install:developer --debug \
         --install-server $CRM_HOST --deployed-server $CRM_HOST --repo-path $REPO \
         --instance $INSTANCE --sugar-flavor $FLAVOR --sugar-version $VERSION \
-        --db-type $DB_TYPE --db-user $DB_USER --db-pass $DB_PASS --db-host $DB_HOST --db-name 0.0.0.0/$DB_NAME --db-port $DB_PORT \
+        --db-type $DB_TYPE --db-user $DB_USER --db-pass $DB_PASS --db-host $DB_HOST --db-name $DB_NAME --db-port $DB_PORT \
         --license-key $LICENSE_KEY \
         --admin-user-name $ADMIN_USER --admin-password $ADMIN_PASS \
     "
@@ -229,15 +248,10 @@ function fixup_instance_code() {
 function run_sql_script() {
     local script="$1"
 
-    echo "=== ${script##*/} ==="
-    ROWS=$(cat ${script} | ${SQLPLUS} -S ${DB_URL} | grep 'rows\? \(created\|updated\)\.')
-    CREATED=$(($(echo "$ROWS" | grep created | sed 's/^\([0-9]*\) row.*/+\1/')))
-    UPDATED=$(($(echo "$ROWS" | grep updated | sed 's/^\([0-9]*\) row.*/+\1/')))
+    echo "=== ${script##*/}: ==="
 
-    SEP=""
-    if [ ${CREATED} -gt 0 ]; then echo -n "$CREATED row(s) created"; SEP=", "; fi
-    if [ ${UPDATED} -gt 0 ]; then echo -n "$SEP$UPDATED row(s) updated"; SEP="."; fi
-    if [ -z "$SEP" ]; then echo ">>> no INSERTs, no UPDATEs?"; else echo "."; fi
+    echo "function \`$0' must be re-implemented by the database driver (DB_TYPE=$DB_TYPE)."
+    exit 4
 }
 
 function run_php_script() {
@@ -347,6 +361,8 @@ function main() {
     if ! load_config; then
         exit 1
     fi
+
+    load_db_library
     show_config
     if ! check_mango_status; then
         exit 2
