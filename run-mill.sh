@@ -7,10 +7,12 @@
 # project directory
 #
 
-
-# The directory where this file is located
-HERE=$(dirname $(readlink -e $0))
-
+#
+# These variables must be set by the caller
+# $HERE is the directory where the custom configuration is located
+HERE=${HERE:?}
+# $CODE is the directory where this file is located (it should be $HERE/vendor/sv-vv/sugar-mill)
+CODE=${CODE:-$HERE/vendor/sv-vv/sugar-mill}
 
 #
 # Configuration variables
@@ -313,7 +315,7 @@ function create_git_repo() {
         echo "The \`.ignore' file was copied."
     else
         echo "The files \`ignore.txt' was not found in \`$DATA'. Using the example file instead."
-        cp "$HERE/examples/git-ignore.txt" "$DEST/.gitignore"
+        cp "$CODE/examples/git-ignore.txt" "$DEST/.gitignore"
     fi
 
     # Create a Git repository in the instance directory to be used for development

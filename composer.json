@@ -10,6 +10,7 @@
         }
     ],
     "bin": [
-        "mill.sh"
+        "install-mill.sh",
+        "run-mill.sh"
     ]
 }

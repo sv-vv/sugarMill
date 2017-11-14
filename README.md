@@ -64,7 +64,7 @@ as a starter.
 ## Caveats
 
 * It always uses the `config.sh` file present in the tool's home directory.
-* It works only with Oracle now.
+* It works <del>only</del> with Oracle (<ins>and MySQL since v0.4</ins>).
 * The backups accumulate and continue to use disk space. You need to manually delete them from time
   to time or set a cron job to do it.
 
@@ -74,6 +74,7 @@ as a starter.
 * <del>Make it database type-agnostic. The current version works only with Oracle (it uses the sql*plus
   command line client to run the SQL files).</del> (added MySQL on v0.4)
 * Create Composer scripts to create a sample `config.sh` and `post-install` scripts on installation.
+* Make sure `config_override.php` already exists before appending to it. Create it otherwise. 
 * Make it receive the path of the configuration file in the command line.
 * Allow overriding in the command line the options loaded from the configuration file.
 * Make the moving of the instance to a new directory optional (currently the moving can be avoided by 
